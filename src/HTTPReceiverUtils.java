@@ -1,7 +1,5 @@
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 
 public class HTTPReceiverUtils {
@@ -10,6 +8,7 @@ public class HTTPReceiverUtils {
 		// Receives header and payload from the streams
 		String header = new String();
 		String tmpline = new String();
+		System.err.println("Starting to read header");
 		while(true){
 			tmpline = IOUtils.readLineFromStreamReader(bis);
 			if(tmpline == null){
@@ -21,22 +20,26 @@ public class HTTPReceiverUtils {
 			}
 			header += tmpline + "\n";
 		}
+		System.err.println("End reading header");
 		
 		if(header == "") return null;
 		
-		System.out.println("Header is " + header);
-		System.err.println("Starting header parse");
+		System.err.println("Header is " + header);
+		System.err.println("Starting to parse header");
 		HTTPHeader hdrobj = new HTTPHeader(header);
 		System.err.println("End header parse");
-		System.err.println(hdrobj.attributes.get("content-length"));
 		// If hdrobj has content length, then read content as well
-		if(hdrobj.attributes.get("content-length") == null)
+		
+		if(hdrobj.attributes.get("content-length") == null){
+			System.err.println("No body detected.");
 			return new HTTPObject(hdrobj, null);
 		
+		}
 		
+		System.err.println("Starting to read body");
 		byte [] bodytmp = new byte[Integer.parseInt(hdrobj.attributes.get("content-length"))];
 		bis.read(bodytmp);
-		System.err.println("End reading bis");
+		System.err.println("End reading body");
 		return new HTTPObject(hdrobj, IOUtils.b2B(bodytmp));
 	}
 

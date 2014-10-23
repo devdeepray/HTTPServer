@@ -15,18 +15,15 @@ public class HTTPProcessorThread extends Thread{
 	public void run(){
 		try{
 
-			while(true){
-				
+			while(true)
 				respMessages.put(HTTPRequestProcessor.getResponse(hrt.recMessages.take()));
-			}
-			
 		}
 		
 		catch (Exception e){
-			
-			e.printStackTrace();
-			return;
 		}
+	
+		System.err.println("Processor thread exiting");
+		return;
 		
 	}
 

@@ -12,20 +12,23 @@ public class HTTPReceiverThread extends Thread{
 	
 	public HTTPReceiverThread(BufferedInputStream bis) {
 		super();
-		recMessages = new LinkedBlockingQueue();
+		recMessages = new LinkedBlockingQueue<HTTPObject>();
 		this.bis = bis;
 	}
 	
 	public void run()
 	{
 		try {
-			while(true)
+			while(true){
+				System.err.println("Starting to receive message");
 				recMessages.put(HTTPReceiverUtils.receive(bis));
+				System.err.println("End receiving message");
+			}
 		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
+			
 		}
+		System.err.println("Receiver thread exiting");
+		return;
 	}
 
 	

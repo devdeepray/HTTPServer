@@ -50,5 +50,15 @@ public class IOUtils {
 			
 		return tmp;
 	}
+
+	public static char[] B2c(Byte[] body) {
+		// TODO Auto-generated method stub
+		char[] tmp = new char[body.length];
+		int i = 0;
+		for(Byte x : body){
+			tmp[i++] = (char)(byte)x;
+		}
+		return null;
+	}
 	
 }

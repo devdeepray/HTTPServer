@@ -15,7 +15,6 @@ public class HTTPSession extends Thread{
 	
 	public HTTPSession(Socket socket) throws SocketException{
 		this.socket = socket;
-		socket.setReceiveBufferSize(1000000);
 	}
 	
 	public void run() {
@@ -29,29 +28,27 @@ public class HTTPSession extends Thread{
 			HTTPProcessorThread hpt = new HTTPProcessorThread(hrt);
 			HTTPSenderThread hst = new HTTPSenderThread(bos, hpt);
 			
+			System.err.println("Starting all pipe threads");
 			hrt.start();
 			hpt.start();
 			hst.start();
-			
+			System.err.println("Started pipe. Waiting for pipe threads to exit.");
+			hrt.join();
+			hpt.join();
+			hst.join();
+			System.err.println("third thread exited. Shutting down things.");
+			throw new Exception();
 		}
 		catch (Exception e){
-			e.printStackTrace();
-			try {
-				socket.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			System.out.println(System.currentTimeMillis());
-			return;
+			// Ignore exception as i am using it to exit
 		}
-		/*try {
+		System.err.println("HTTP Session ended. Closing down connection and other stuff");
+		try {
 			socket.close();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
+			System.err.println("Couldnt close socket. Still exiting");
+		}
+		return;
 
 		
 	}

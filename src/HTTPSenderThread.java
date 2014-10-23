@@ -14,11 +14,13 @@ public class HTTPSenderThread extends Thread{
 
 	public void run() {
 		try {
-			HTTPSenderUtils.send(hpt.respMessages.take(), bos);
+			while(true)
+				HTTPSenderUtils.send(hpt.respMessages.take(), bos);
 		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-			return;
+			
 		}
+		System.err.println("Send thread exiting");
+		return;
 		
 	}
 
