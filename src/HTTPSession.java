@@ -22,12 +22,14 @@ public class HTTPSession extends Thread{
 			// Pipelining the requests and data sending
 			// Create a buffered reader and buffered writer and a buffered output stream for binary
 			BufferedInputStream bis = new BufferedInputStream(socket.getInputStream());
+			//BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
+			//BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			
 			HTTPReceiverThread hrt = new HTTPReceiverThread(bis);
 			HTTPProcessorThread hpt = new HTTPProcessorThread(hrt);
 			HTTPSenderThread hst = new HTTPSenderThread(bos, hpt);
-			
+			hrt.keepalive = hpt.keepalive = hst.keepalive = false;
 			System.err.println("Starting all pipe threads");
 			hrt.start();
 			hpt.start();

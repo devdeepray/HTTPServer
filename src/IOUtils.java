@@ -58,7 +58,18 @@ public class IOUtils {
 		for(Byte x : body){
 			tmp[i++] = (char)(byte)x;
 		}
-		return null;
+		return tmp;
+	}
+
+	public static Byte[] c2B(char[] bodytmp) {
+		Byte[] tmp = new Byte[bodytmp.length];
+		int i = 0;
+		for(char x : bodytmp){
+			tmp[i++] = (byte)x;
+		}
+			
+		return tmp;
+		
 	}
 	
 }

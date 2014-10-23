@@ -1,4 +1,5 @@
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
 
 
@@ -6,6 +7,7 @@ public class HTTPSenderThread extends Thread{
 
 	HTTPProcessorThread hpt;
 	BufferedOutputStream bos;
+	boolean keepalive;
 	
 	public HTTPSenderThread(BufferedOutputStream bos, HTTPProcessorThread hpt) {
 		this.hpt = hpt;
@@ -14,8 +16,9 @@ public class HTTPSenderThread extends Thread{
 
 	public void run() {
 		try {
-			while(true)
+			do{
 				HTTPSenderUtils.send(hpt.respMessages.take(), bos);
+			}while(keepalive);
 		} catch (IOException | InterruptedException e) {
 			
 		}

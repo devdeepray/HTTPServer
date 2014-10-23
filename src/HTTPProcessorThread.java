@@ -5,6 +5,7 @@ public class HTTPProcessorThread extends Thread{
 
 	HTTPReceiverThread hrt;
 	LinkedBlockingQueue<HTTPObject> respMessages;
+	boolean keepalive;
 	
 	public HTTPProcessorThread(HTTPReceiverThread hrt) {
 		
@@ -15,8 +16,10 @@ public class HTTPProcessorThread extends Thread{
 	public void run(){
 		try{
 
-			while(true)
+			do{
+				
 				respMessages.put(HTTPRequestProcessor.getResponse(hrt.recMessages.take()));
+			}while(keepalive);
 		}
 		
 		catch (Exception e){
