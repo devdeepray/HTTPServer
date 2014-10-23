@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 
-public class HTTPReceiver {
+public class HTTPReceiverUtils {
 
-	public static HTTPObject receive(BufferedInputStream bis, InputStreamReader ibsr) throws IOException {
+	public static HTTPObject receive(BufferedInputStream bis) throws IOException {
 		// Receives header and payload from the streams
 		String header = new String();
 		String tmpline = new String();
 		while(true){
-			tmpline = IOUtils.readLineFromStreamReader(ibsr);
+			tmpline = IOUtils.readLineFromStreamReader(bis);
 			if(tmpline == null){
 				break;
 			}
@@ -33,20 +33,11 @@ public class HTTPReceiver {
 		if(hdrobj.attributes.get("content-length") == null)
 			return new HTTPObject(hdrobj, null);
 		
-		// Otherwise read the body
-		char [] bodytmp = new char[Integer.parseInt(hdrobj.attributes.get("content-length"))];
-		System.err.println("Starting reading bis");
-		byte [] bodytmp1 = new byte[bodytmp.length];
-		ibsr.read(bodytmp);
+		
+		byte [] bodytmp = new byte[Integer.parseInt(hdrobj.attributes.get("content-length"))];
+		bis.read(bodytmp);
 		System.err.println("End reading bis");
-		
-		int i=0;
-		for(char x:bodytmp)
-		{
-			bodytmp1[i++] = (byte) x;
-		}
-		
-		return new HTTPObject(hdrobj, IOUtils.b2B(bodytmp1));
+		return new HTTPObject(hdrobj, IOUtils.b2B(bodytmp));
 	}
 
 }

@@ -1,16 +1,17 @@
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 
 public class IOUtils {
 	
-	public static String readLineFromStreamReader(InputStreamReader isr) throws IOException{
+	public static String readLineFromStreamReader(BufferedInputStream bis) throws IOException{
 		
 		String tmpstr = new String();
 		boolean flag = false;
 		while(true){
 
-			int tmp = isr.read(); 
+			int tmp = bis.read();
 			if(tmp == -1) break;
 			if(tmp == (int)'\n'){
 				

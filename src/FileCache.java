@@ -1,15 +1,16 @@
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class FileCache {
 
-	static HashMap<String, Byte[]> fileDataMap = new  HashMap<String, Byte[]> ();
-	static HashMap<String, Long> timeStamp = new HashMap<String, Long>();
-	static HashMap<String, Boolean> isDirectory = new HashMap<String, Boolean>();
-	static HashMap<String, Long> isDTimeStamp = new HashMap<String, Long>();
-	static HashMap<String, Boolean> doesExist = new HashMap<String, Boolean>();
-	static HashMap<String, Long> doesExistTimeStamp = new HashMap<String, Long>();
+	static ConcurrentHashMap<String, Byte[]> fileDataMap = new  ConcurrentHashMap<String, Byte[]> ();
+	static ConcurrentHashMap<String, Long> timeStamp = new ConcurrentHashMap<String, Long>();
+	static ConcurrentHashMap<String, Boolean> isDirectory = new ConcurrentHashMap<String, Boolean>();
+	static ConcurrentHashMap<String, Long> isDTimeStamp = new ConcurrentHashMap<String, Long>();
+	static ConcurrentHashMap<String, Boolean> doesExist = new ConcurrentHashMap<String, Boolean>();
+	static ConcurrentHashMap<String, Long> doesExistTimeStamp = new ConcurrentHashMap<String, Long>();
  	
 	public static void loadResponsePages() throws IOException {
 		// Load redir, internal error and notfound

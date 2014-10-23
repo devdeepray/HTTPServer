@@ -25,6 +25,7 @@ public class HTTPRequestProcessor {
 				resp.header.version = "HTTP/1.1";
 				resp.header.action = "404";
 				resp.header.param = "NOT FOUND";
+				resp.header.attributes.put("Connection", "keep-alive");
 				resp.header.attributes.put("Content-Type", "text/html");
 				resp.body = FileCache.getPage("res/notfound.html");
 				resp.header.attributes.put("Content-Length", ""+ resp.body.length);
@@ -37,6 +38,7 @@ public class HTTPRequestProcessor {
 				resp.header.version = "HTTP/1.1";
 				resp.header.action = "301";
 				resp.header.param = "PERMANENTLY MOVED";
+				resp.header.attributes.put("Connection", "Keep-Alive");
 				resp.header.attributes.put("Location", hto.header.attributes.get("host") + redirUri);
 				resp.header.attributes.put("Content-Type", "text/html");
 				if(hto.header.action.equals("GET")){
@@ -54,6 +56,7 @@ public class HTTPRequestProcessor {
 				resp.header.version = "HTTP/1.1";
 				resp.header.action = "200";
 				resp.header.param = "OK";
+				resp.header.attributes.put("Connection", "Keep-Alive");
 				resp.header.attributes.put("Location", hto.header.attributes.get("host") + hto.header.param);
 				resp.header.attributes.put("Content-Type", ftype);
 				resp.header.attributes.put("Connection : ", "keep-alive");
@@ -80,7 +83,7 @@ public class HTTPRequestProcessor {
 				String header = new String();
 				String tmpline = new String();
 				while(true){
-					tmpline = IOUtils.readLineFromStreamReader(ibsr);
+					tmpline = IOUtils.readLineFromStreamReader(bis);
 					if(tmpline == null){
 						break;
 					}
@@ -105,6 +108,7 @@ public class HTTPRequestProcessor {
 				byte [] bodytmp = baos.toByteArray();
 
 				hdrobj.attributes.put("Content-Length", ""+bodytmp.length);
+				hdrobj.attributes.put("Connection", "Keep-Alive");
 				return new HTTPObject(hdrobj, IOUtils.b2B(bodytmp));
 				
 			}

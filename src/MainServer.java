@@ -10,8 +10,10 @@ public class MainServer {
 		int port = 9090;
 		// Load up the file cache
 		//FileCache.loadResponsePages();
-		// Start the connection listener on set port 
+		// Start the connection listener on set port
 		connlistener = new ConnectionListener(port);
+
+		System.err.println("Listening on port 9090");
 		connlistener.beginListening();		
 	}
 	

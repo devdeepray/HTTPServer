@@ -14,17 +14,18 @@ public class ConnectionListener {
 	public void beginListening() throws IOException {
 		// Begins listening on the socket in an infinite loop.
 		// After accepting a connection, creates a HTTPSession and data transfers begin
-		while(true)
-		{
-			
+		/*while(true)
+		{*/
+			System.err.println("Ready to accept inccoming TCP connection");
 			Socket socket = serversocket.accept();
 			//socket.setSoTimeout(10);
 			System.out.println("connected");
 			long oldt = System.currentTimeMillis();
 			HTTPSession httpsession = new HTTPSession(socket);
-			httpsession.start();
+			serversocket.close();
+			httpsession.run();
 			System.err.println(System.currentTimeMillis() - oldt);
-		}
+		//}
 	}
 
 }

@@ -19,29 +19,22 @@ public class HTTPSession extends Thread{
 	}
 	
 	public void run() {
-		try
-		{
+		try{
+			// Pipelining the requests and data sending
 			// Create a buffered reader and buffered writer and a buffered output stream for binary
 			BufferedInputStream bis = new BufferedInputStream(socket.getInputStream());
 			BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(bos));
-			InputStreamReader isr = new InputStreamReader(bis);
-			System.out.println("Recevied ");
 			
-				System.err.println("Start to receive");
-				HTTPObject hto = HTTPReceiver.receive(bis, isr);
-				if(hto == null) return;
-				System.err.println("End receive");
-				System.err.println("Start to process");
-				HTTPObject response = HTTPRequestProcessor.getResponse(hto);
-				System.err.println("End process");
-				System.err.println("Start to send");
-				HTTPSender.send(response, bos, writer);
-				System.err.println("End send");
-			// Now we need to process hto
+			HTTPReceiverThread hrt = new HTTPReceiverThread(bis);
+			HTTPProcessorThread hpt = new HTTPProcessorThread(hrt);
+			HTTPSenderThread hst = new HTTPSenderThread(bos, hpt);
+			
+			hrt.start();
+			hpt.start();
+			hst.start();
+			
 		}
-		catch (Exception e)
-		{
+		catch (Exception e){
 			e.printStackTrace();
 			try {
 				socket.close();
@@ -53,12 +46,12 @@ public class HTTPSession extends Thread{
 			System.out.println(System.currentTimeMillis());
 			return;
 		}
-		try {
+		/*try {
 			socket.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		}*/
 
 		
 	}
