@@ -4,17 +4,29 @@ import java.io.IOException;
 public class MainServer {
 	// This is the main server class. It initiates various modules and starts listening
 	
-	public static void main(String arg[]) throws IOException {
+	public static int debugCode = 0x1;
+	
+	public static void main(String arg[]){
 		// Variable declarations
 		ConnectionListener connlistener = null;
-		int port = 9090;
-		// Load up the file cache
-		//FileCache.loadResponsePages();
+		
 		// Start the connection listener on set port
-		connlistener = new ConnectionListener(port);
-
-		System.err.println("Listening on port 9090");
-		connlistener.beginListening();		
+		try{
+			connlistener = new ConnectionListener(ServerSettings.getPortNumber());
+		}
+		catch (IOException e){
+			Debug.print("Error starting socket", debugCode);
+			return;
+		}
+		
+		
+		Debug.print("Listening on port " + ServerSettings.getPortNumber(), debugCode);
+		try {
+			connlistener.beginListening();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Debug.print("Unhandled error while listening on socket. Should never occur", debugCode);
+		}		
 	}
 	
 }

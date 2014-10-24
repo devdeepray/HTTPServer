@@ -17,33 +17,36 @@ public class HTTPRequestProcessor {
 	public static HTTPObject getResponse(HTTPObject hto) throws IOException {
 		
 		// Get process
-		if(hto.header.action.equals("GET") || hto.header.action.equals("HEAD")){
+		if(hto.header.action.equals(StringConstants.getRequestAction) || hto.header.action.equals(StringConstants.headRequestAction)){
 			
 			String filePath = FileTools.parseUriToPath(hto.header.param);
 			if(!FileCache.checkDoesExist(filePath)){
 				HTTPObject resp = new HTTPObject();
-				resp.header.version = "HTTP/1.1";
-				resp.header.action = "404";
-				resp.header.param = "NOT FOUND";
-				resp.header.attributes.put("Connection", "keep-alive");
-				resp.header.attributes.put("Content-Type", "text/html");
-				resp.body = FileCache.getPage("res/notfound.html");
-				resp.header.attributes.put("Content-Length", ""+ resp.body.length);
+				resp.header.version = StringConstants.HTTP11;
+				resp.header.action = StringConstants.notFoundCode;
+				resp.header.param = StringConstants.notFoundMessage;
+				if(ServerSettings.isKeepAlive())
+					resp.header.attributes.put(StringConstants.connection, StringConstants.keepAlive);
+				else
+					resp.header.attributes.put(StringConstants.connection,  StringConstants.closeConnection);
+				resp.header.attributes.put(StringConstants.contentType, StringConstants.textHtml);
+				resp.body = FileCache.getPage(ServerSettings.getNotFoundFile());
+				resp.header.attributes.put(StringConstants.contentLength, ""+ resp.body.length);
 				return resp;
 			}
 			else if(FileCache.checkIsDirectory(filePath)){
 				
 				String redirUri = getRedirectUri(hto.header.param);
 				HTTPObject resp = new HTTPObject();
-				resp.header.version = "HTTP/1.1";
-				resp.header.action = "301";
-				resp.header.param = "PERMANENTLY MOVED";
-				resp.header.attributes.put("Connection", "Keep-Alive");
-				resp.header.attributes.put("Location", hto.header.attributes.get("host") + redirUri);
-				resp.header.attributes.put("Content-Type", "text/html");
-				if(hto.header.action.equals("GET")){
+				resp.header.version = StringConstants.HTTP11;
+				resp.header.action = StringConstants.permanentlyMovedCode;
+				resp.header.param = StringConstants.permanentlyMovedMessage;
+				resp.header.attributes.put(StringConstants.connection, StringConstants.keepAlive);
+				resp.header.attributes.put(StringConstants.location, hto.header.attributes.get(StringConstants.host) + redirUri);
+				resp.header.attributes.put(StringConstants.contentType, StringConstants.textHtml);
+				if(hto.header.action.equals(StringConstants.getRequestAction)){
 					
-					resp.body = FileCache.getPage("res/redir.html");
+					resp.body = FileCache.getPage(ServerSettings.getRedirFile());
 					resp.header.attributes.put("Content-Length", ""+resp.body.length);
 				}
 				
@@ -59,9 +62,8 @@ public class HTTPRequestProcessor {
 				resp.header.attributes.put("Connection", "Keep-Alive");
 				resp.header.attributes.put("Location", hto.header.attributes.get("host") + hto.header.param);
 				resp.header.attributes.put("Content-Type", ftype);
-				resp.header.attributes.put("Connection : ", "keep-alive");
 				resp.body = FileCache.getPage(filePath);
-				resp.header.attributes.put("Content-Length", ""+resp.body.length);
+				resp.header.attributes.put("Content-Length", ""+(resp.body.length));
 				return resp;
 			}
 			

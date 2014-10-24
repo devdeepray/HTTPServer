@@ -27,27 +27,21 @@ public class FileTools {
 		return binFile;
 	}
 
-	public static String parseUriToPath(String param) {
-		
-		/*String webRootPath = "C:/webtest";
-		String userRoot = "C:/Users";*/
-		
-		String webRootPath = "/users/webdefault";
-		String userRoot = "/home/devdeep/dump";
+	public static String parseUriToPath(String param) {		
 		
 		// Cases: first token begins with ~
 		// 		First token doesnt start with ~
 		StringTokenizer strtkn = new StringTokenizer(param, "/");
 		if(strtkn.countTokens() == 0){
-			return webRootPath;
+			return StringConstants.webRootPath;
 		}
 		
 		String finalPath = new String();
 		String token1 = strtkn.nextToken();
 		if(token1.startsWith("~"))
-			finalPath = userRoot + "/" + token1.substring(1) + "/public_html";
+			finalPath = StringConstants.userRoot + "/" + token1.substring(1) + "/" + StringConstants.userHTMLFolder;
 		else
-			finalPath = webRootPath + "/" + token1.substring(1);
+			finalPath = StringConstants.webRootPath + "/" + token1.substring(1);
 		
 		while(strtkn.hasMoreTokens())
 		{
@@ -73,7 +67,7 @@ public class FileTools {
 		// TODO Auto-generated method stub
 		int lastslind = filePath.lastIndexOf('/');
 		String sub = filePath.substring(0, lastslind);
-		return FileCache.checkDoesExist(sub+"/cgienab");
+		return FileCache.checkDoesExist(sub+"/" + StringConstants.cgiConfName);
 	}
 
 }

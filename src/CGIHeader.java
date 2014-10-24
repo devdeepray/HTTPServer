@@ -8,9 +8,9 @@ public class CGIHeader extends HTTPHeader{
 		// Code for parsing GET, etc
 		attributes = new HashMap<String, String>();
 		
-		String [] headerLines = header.split("\n");
+		String [] headerLines = header.split("\r?\n");
 		for(int i = 1; i < headerLines.length; ++i){
-			String []tokns = headerLines[i].split(": ");
+			String []tokns = headerLines[i].split(":");
 			if(tokns.length != 2) continue;
 			attributes.put(tokns[0].trim().toLowerCase(), tokns[1].trim());
 		}

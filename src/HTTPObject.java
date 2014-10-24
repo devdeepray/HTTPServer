@@ -15,4 +15,10 @@ public class HTTPObject {
 		header = new HTTPHeader();
 		body = null;
 	}
+	
+	public static HTTPObject nullHTTPObject(){
+		HTTPObject tmp = new HTTPObject();
+		tmp.header = null;
+		return tmp;
+	}
 }

@@ -5,6 +5,7 @@ import java.net.Socket;
 
 public class ConnectionListener {
 
+	public static int debugCode = 0x2;
 	ServerSocket serversocket = null;
 	public ConnectionListener(int port) throws IOException {
 		// Initiate a server socket to listen to tcp connections on given port
@@ -16,18 +17,30 @@ public class ConnectionListener {
 		// After accepting a connection, creates a HTTPSession and data transfers begin
 		while(true)
 		{
-			System.err.println("Trying to accept incoming TCP connection");
-			Socket socket = serversocket.accept();
-			socket.setSoTimeout(5000);
-			System.err.println("TCP connection established");
-			//socket.setSoTimeout(10);
-			HTTPSession httpsession = new HTTPSession(socket);
-			//System.err.println("Closing down server socket");
-			//serversocket.close();
-			System.err.println("Start http session");
-			httpsession.start();
-			System.err.println("End http session");
+			// Infinite loop. Never supposed to exit.
+			
+			Debug.print("Trying to accept incoming TCP connection", debugCode);
+			Socket socket = serversocket.accept(); // Blocking till incoming connection comes
+			
+			socket.setSoTimeout(ServerSettings.getSoTimeout()); // Set timeout of socket
+			Debug.print("TCP connection established", debugCode); 
+			HTTPSession httpsession = new HTTPSession(socket); // Create new HTTPSession to process connection
+			
+			if(ServerSettings.isMultiThreaded()){
+				Debug.print("Start http session multithreaded", debugCode);
+				ThreadPool.executeSessionThread(httpsession);
+				Debug.print("Started http session multithreaded", debugCode);
+		
+			}
+			else
+			{
+				Debug.print("Start http session", debugCode);
+				httpsession.run();
+				Debug.print("End http session", debugCode);
+			}
+			
 		}
+		
 	}
 
 }

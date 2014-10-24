@@ -9,47 +9,66 @@ import java.net.Socket;
 import java.net.SocketException;
 
 
-public class HTTPSession extends Thread{
+public class HTTPSession implements Runnable{
 	
 	Socket socket;
+	public static int debugCode = 0x4;
 	
 	public HTTPSession(Socket socket) throws SocketException{
 		this.socket = socket;
 	}
 	
-	public void run() {
-		try{
-			// Pipelining the requests and data sending
-			// Create a buffered reader and buffered writer and a buffered output stream for binary
-			BufferedInputStream bis = new BufferedInputStream(socket.getInputStream());
-			//BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
-			//BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			
-			HTTPReceiverThread hrt = new HTTPReceiverThread(bis);
-			HTTPProcessorThread hpt = new HTTPProcessorThread(hrt);
-			HTTPSenderThread hst = new HTTPSenderThread(bos, hpt);
-			hrt.keepalive = hpt.keepalive = hst.keepalive = false;
-			System.err.println("Starting all pipe threads");
-			hrt.start();
-			hpt.start();
-			hst.start();
-			System.err.println("Started pipe. Waiting for pipe threads to exit.");
-			hrt.join();
-			hpt.join();
-			hst.join();
-			System.err.println("third thread exited. Shutting down things.");
-			throw new Exception();
-		}
-		catch (Exception e){
-			// Ignore exception as i am using it to exit
-		}
-		System.err.println("HTTP Session ended. Closing down connection and other stuff");
+	public void closeSocket()
+	{
 		try {
 			socket.close();
 		} catch (IOException e1) {
 			System.err.println("Couldnt close socket. Still exiting");
 		}
+	}
+	
+	public void run() {
+		
+		// Start processing a connection. Cant throw exceptions from here, all must be handled
+		
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
+		
+		// Create a buffered reader and buffered writer and a buffered output stream for binary
+		try{
+			bis = new BufferedInputStream(socket.getInputStream());
+			bos = new BufferedOutputStream(socket.getOutputStream());
+		}catch (IOException e){
+			Debug.print("IOException while creating streams from socket", debugCode);
+			closeSocket();
+			return;
+		}
+			// Pipelining the requests and data sending
+			if(ServerSettings.isPiped()){
+
+				HTTPReceiverRunnable hrt = new HTTPReceiverRunnable(bis);
+				HTTPProcessorRunnable hpt = new HTTPProcessorRunnable(hrt);
+				HTTPSenderRunnable hst = new HTTPSenderRunnable(bos, hpt);
+				Debug.print("Starting all pipe threads", debugCode);
+				ThreadPool.executeSessionThread(hrt);
+				ThreadPool.executeSessionThread(hpt);
+				hst.run();
+				Debug.print("third thread exited. Shutting down things.", debugCode);
+			}
+			
+			else{
+				
+				Debug.print("Processing one http packet", debugCode);
+				try {
+					HTTPSenderUtils.send(HTTPRequestProcessor.getResponse(HTTPReceiverUtils.receive(bis)), bos);
+				} catch (Exception e) {
+					Debug.print("Finished processing one packet", debugCode);
+				}
+			}
+		
+		
+		System.err.println("HTTP Session ended. Closing down connection and other stuff");
+		closeSocket();
 		return;
 
 		
