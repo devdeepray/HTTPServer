@@ -1,4 +1,7 @@
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 
 public class ServerSettings {
@@ -17,7 +20,11 @@ public class ServerSettings {
 	private static int maxSessionThreads = 20;
 	private static long threadKeepAliveTime = 6000000;
 	private static String notFoundFilePath = "res/notfound.html";
-	
+	private static String redirFilePath = "res/redir.html";
+	private static String internalErrorFilePath = "res/internalerror.html";
+	private static String badRequestFilePath = "res/badrequest.html";
+	private static ConcurrentSkipListSet<String> CGIExtensions = new ConcurrentSkipListSet<String>(Arrays.asList("py","sh"));
+	private static ConcurrentSkipListSet <String> textTypes = new ConcurrentSkipListSet<String>(Arrays.asList("txt", "html", "css", "js", "htm"));
 
 
 	public static int getSoTimeout() {
@@ -92,7 +99,30 @@ public class ServerSettings {
 
 	public static String getRedirFile() {
 		// TODO Auto-generated method stub
-		return null;
+		return redirFilePath;
+	}
+
+
+	public static String getInternalErrorFile() {
+		// TODO Auto-generated method stub
+		return internalErrorFilePath;
+	}
+
+
+	public static String getBadRequestFile() {
+		// TODO Auto-generated method stub
+		return badRequestFilePath ;
+	}
+
+
+	public static boolean isValidCGIExtension(String extn) {
+		// TODO Auto-generated method stub
+		return CGIExtensions.contains(extn);
+	}
+	
+	public static boolean isTextType(String extn)
+	{
+		return textTypes.contains(extn);
 	}
 
 

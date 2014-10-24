@@ -19,7 +19,7 @@ public class HTTPSenderRunnable implements Runnable{
 		try {
 			do{
 				HTTPObject tmp = hpt.respMessages.take();
-				if(tmp.equals(HTTPObject.nullHTTPObject()))
+				if(tmp.header == null)
 					break;
 				HTTPSenderUtils.send(tmp, bos);
 			}while(ServerSettings.isKeepAlive());

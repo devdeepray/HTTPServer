@@ -5,9 +5,10 @@ import java.net.Socket;
 
 public class ConnectionListener {
 
-	public static int debugCode = 0x2;
-	ServerSocket serversocket = null;
+	public static int debugCode = 0x2; // Debug filter
+	ServerSocket serversocket = null; // Server socket that listens for connections
 	public ConnectionListener(int port) throws IOException {
+		
 		// Initiate a server socket to listen to tcp connections on given port
 		serversocket = new ServerSocket(port);
 	}

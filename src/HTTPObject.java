@@ -1,6 +1,7 @@
-import java.util.HashMap;
 
 public class HTTPObject {
+	
+	// Class to represent a complete HTTP object
 	// Member variables
 	public HTTPHeader header;
 	public Byte [] body;

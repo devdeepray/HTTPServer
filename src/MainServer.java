@@ -18,7 +18,13 @@ public class MainServer {
 			Debug.print("Error starting socket", debugCode);
 			return;
 		}
-		
+		try {
+			FileCache.initPermCache();
+		} catch (IOException e1) {
+			Debug.print("Could not initiate permanent cache. Disk error?", debugCode);
+			e1.printStackTrace();
+			return;
+		}
 		
 		Debug.print("Listening on port " + ServerSettings.getPortNumber(), debugCode);
 		try {

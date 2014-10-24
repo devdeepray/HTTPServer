@@ -15,7 +15,7 @@ public class IOUtils {
 			if(tmp == -1) break;
 			if(tmp == (int)'\n'){
 				
-				if(tmpstr.charAt(tmpstr.length()-1)=='\r')
+				if(tmpstr.length()>0 && tmpstr.charAt(tmpstr.length()-1)=='\r')
 					tmpstr = tmpstr.substring(0, tmpstr.length()-1);
 				break;
 			}
