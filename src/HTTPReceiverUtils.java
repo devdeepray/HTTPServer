@@ -1,16 +1,17 @@
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 public class HTTPReceiverUtils {
 
-	public static HTTPObject receive(BufferedInputStream bis) throws IOException {
+	public static HTTPObject receive(InputStream is) throws IOException {
 		// Receives header and payload from the streams
 		String header = new String();
 		String tmpline = new String();
 		System.err.println("Starting to read header");
 		while(true){
-			tmpline = IOUtils.readLineFromStreamReader(bis);
+			tmpline = IOUtils.readLineFromStreamReader(is);
 			if(tmpline == null){
 				break;
 			}
@@ -38,7 +39,7 @@ public class HTTPReceiverUtils {
 		
 		System.err.println("Starting to read body");
 		byte [] bodytmp = new byte[Integer.parseInt(hdrobj.attributes.get("content-length"))];
-		bis.read(bodytmp);
+		is.read(bodytmp);
 		System.err.println("End reading body");
 		return new HTTPObject(hdrobj, IOUtils.b2B(bodytmp));
 	}

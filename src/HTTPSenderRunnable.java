@@ -1,17 +1,18 @@
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 
 
 public class HTTPSenderRunnable implements Runnable{
 
 	HTTPProcessorRunnable hpt;
-	BufferedOutputStream bos;
+	OutputStream os;
 	private static int debugCode = 0xF;
 	
-	public HTTPSenderRunnable(BufferedOutputStream bos, HTTPProcessorRunnable hpt) {
+	public HTTPSenderRunnable(OutputStream os, HTTPProcessorRunnable hpt) {
 		this.hpt = hpt;
-		this.bos = bos;
+		this.os = os;
 	}
 
 	public void run() {
@@ -21,7 +22,7 @@ public class HTTPSenderRunnable implements Runnable{
 				HTTPObject tmp = hpt.respMessages.take();
 				if(tmp.header == null)
 					break;
-				HTTPSenderUtils.send(tmp, bos);
+				HTTPSenderUtils.send(tmp, os);
 			}while(ServerSettings.isKeepAlive());
 		} catch ( Exception e) {
 			

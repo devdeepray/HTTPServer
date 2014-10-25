@@ -3,7 +3,9 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
@@ -31,13 +33,13 @@ public class HTTPSession implements Runnable{
 		
 		// Start processing a connection. Cant throw exceptions from here, all must be handled
 		
-		BufferedInputStream bis = null;
-		BufferedOutputStream bos = null;
+		InputStream is = null;
+		OutputStream os = null;
 		
 		// Create a buffered reader and buffered writer and a buffered output stream for binary
 		try{
-			bis = new BufferedInputStream(socket.getInputStream());
-			bos = new BufferedOutputStream(socket.getOutputStream());
+			is = socket.getInputStream();
+			os = socket.getOutputStream();
 		}catch (IOException e){
 			Debug.print("IOException while creating streams from socket", debugCode);
 			closeSocket();
@@ -46,9 +48,9 @@ public class HTTPSession implements Runnable{
 			// Pipelining the requests and data sending
 			if(ServerSettings.isPiped()){
 
-				HTTPReceiverRunnable hrt = new HTTPReceiverRunnable(bis);
+				HTTPReceiverRunnable hrt = new HTTPReceiverRunnable(is);
 				HTTPProcessorRunnable hpt = new HTTPProcessorRunnable(hrt);
-				HTTPSenderRunnable hst = new HTTPSenderRunnable(bos, hpt);
+				HTTPSenderRunnable hst = new HTTPSenderRunnable(os, hpt);
 				Debug.print("Starting all pipe threads", debugCode);
 				ThreadPool.executeSessionThread(hrt);
 				ThreadPool.executeSessionThread(hpt);
@@ -60,7 +62,7 @@ public class HTTPSession implements Runnable{
 				
 				Debug.print("Processing one http packet", debugCode);
 				try {
-					HTTPSenderUtils.send(HTTPRequestProcessor.getResponse(HTTPReceiverUtils.receive(bis)), bos);
+					HTTPSenderUtils.send(HTTPRequestProcessor.getResponse(HTTPReceiverUtils.receive(is)), os);
 				} catch (Exception e) {
 					Debug.print("Finished processing one packet", debugCode);
 				}

@@ -28,6 +28,11 @@ public class ServerSettings {
 	private static String badRequestFilePath = "res/badrequest.html";
 	private static ConcurrentSkipListSet<String> CGIExtensions = new ConcurrentSkipListSet<String>(Arrays.asList("py","sh"));
 	private static ConcurrentSkipListSet <String> textTypes = new ConcurrentSkipListSet<String>(Arrays.asList("txt", "html", "css", "js", "htm"));
+	public static String supportedEncoding = "gzip";
+	public static String webRootPath = "/users/webdefault";
+	public static String userRootPath = "/home/devdeep/dump";
+	public static String userHTMLFolder = "public_html";
+	public static String cgiConfName = "cgienab";
 
 
 	public static void loadServerSettings(String fname) throws IOException{
@@ -187,6 +192,26 @@ public class ServerSettings {
 	public static boolean isTextType(String extn)
 	{
 		return textTypes.contains(extn);
+	}
+
+	public static String getCgiConfName() {
+		// TODO Auto-generated method stub
+		return cgiConfName;
+	}
+
+	public static String getWebRootPath() {
+		// TODO Auto-generated method stub
+		return webRootPath;
+	}
+
+	public static String getUserHTMLFolder() {
+		// TODO Auto-generated method stub
+		return userHTMLFolder;
+	}
+
+	public static String getUserRootPath() {
+		// TODO Auto-generated method stub
+		return userRootPath;
 	}
 
 

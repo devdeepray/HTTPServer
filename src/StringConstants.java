@@ -2,10 +2,6 @@
 public class StringConstants {
 
 	public static String HTTP11 = "HTTP/1.1";
-	public static String webRootPath = "/users/webdefault";
-	public static String userRoot = "/home/devdeep/dump";
-	public static String userHTMLFolder = "public_html";
-	public static String cgiConfName = "cgienab";
 	public static String headRequestAction = "HEAD";
 	public static String getRequestAction = "GET";
 	public static String postRequestAction = "POST";
@@ -30,5 +26,6 @@ public class StringConstants {
 	public static String textType = "text";
 	public static String binaryContentType = "application/octet-stream";
 	public static String defaultLanding = "index.html";
-	
+	public static String contentEncoding = "Content-Encoding";
+	public static String acceptEncoding = "Accept-Encoding";
 }

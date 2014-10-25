@@ -48,7 +48,6 @@ public class HTTPRequestProcessor {
 
 	private static HTTPObject standardGetResponse(HTTPObject hto, String filePath) {
 		
-		System.out.println("Getting response");
 		String ftype = getFileExtType(filePath);
 		HTTPObject resp = new HTTPObject();
 		resp.header.version = StringConstants.HTTP11;
@@ -60,6 +59,13 @@ public class HTTPRequestProcessor {
 			resp.header.attributes.put(StringConstants.connection,  StringConstants.closeConnection);
 		resp.header.attributes.put(StringConstants.location, hto.header.attributes.get(StringConstants.host.toLowerCase()) + hto.header.param);
 		resp.header.attributes.put(StringConstants.contentType, ftype);
+		String enc;
+		if((enc = hto.header.attributes.get(StringConstants.acceptEncoding)) != null){
+			HashSet<String> encset = new HashSet<String>(Arrays.asList(enc.split("\\s*,\\s*")));
+			if(encset.contains(ServerSettings.supportedEncoding)){
+				resp.header.attributes.put(StringConstants.contentEncoding, ServerSettings.supportedEncoding);
+			}
+		}
 		try {
 			resp.body = FileCache.getPage(filePath);
 		} catch (IOException e) {

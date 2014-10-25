@@ -1,5 +1,6 @@
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
@@ -7,14 +8,14 @@ public class HTTPReceiverRunnable implements Runnable{
 	
 	// Receiver receives messages and puts it in the queue for the processor to drain
 	LinkedBlockingQueue<HTTPObject> recMessages;
-	BufferedInputStream bis;
+	InputStream is;
 	private static int debugCode = 0xF;
 	
 	
-	public HTTPReceiverRunnable(BufferedInputStream bis) {
+	public HTTPReceiverRunnable(InputStream is) {
 		super();
 		recMessages = new LinkedBlockingQueue<HTTPObject>();
-		this.bis = bis;
+		this.is = is;
 	}
 	
 	public void run()
@@ -26,7 +27,7 @@ public class HTTPReceiverRunnable implements Runnable{
 			do{
 				
 				Debug.print("Starting to receive message", debugCode );
-				recMessages.put(HTTPReceiverUtils.receive(bis));
+				recMessages.put(HTTPReceiverUtils.receive(is));
 				System.err.println("End receiving message");
 			}while(ServerSettings.isKeepAlive());
 			

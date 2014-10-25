@@ -37,15 +37,15 @@ public class FileTools {
 		// 		First token doesnt start with ~
 		StringTokenizer strtkn = new StringTokenizer(param, "/");
 		if(strtkn.countTokens() == 0){
-			return StringConstants.webRootPath;
+			return ServerSettings.getWebRootPath();
 		}
 		
 		String finalPath = new String();
 		String token1 = strtkn.nextToken();
 		if(token1.startsWith("~"))
-			finalPath = StringConstants.userRoot + "/" + token1.substring(1) + "/" + StringConstants.userHTMLFolder;
+			finalPath = ServerSettings.getUserRootPath() + "/" + token1.substring(1) + "/" + ServerSettings.getUserHTMLFolder();
 		else
-			finalPath = StringConstants.webRootPath + "/" + token1.substring(1);
+			finalPath = ServerSettings.getWebRootPath() + "/" + token1.substring(1);
 		
 		while(strtkn.hasMoreTokens())
 		{
@@ -84,7 +84,7 @@ public class FileTools {
 		int lastslind = filePath.lastIndexOf('/');
 		String sub = filePath.substring(0, lastslind);
 		String fname = filePath.substring(lastslind + 1);
-		return FileCache.checkDoesExist(sub+ "/" + StringConstants.cgiConfName) && ServerSettings.isValidCGIExtension(getExtn(fname));
+		return FileCache.checkDoesExist(sub+ "/" + ServerSettings.getCgiConfName()) && ServerSettings.isValidCGIExtension(getExtn(fname));
 	}
 
 	public static BufferedReader getBufferedReader(String fname) throws FileNotFoundException {
