@@ -57,21 +57,33 @@ public class HTTPRequestProcessor {
 			resp.header.attributes.put(StringConstants.connection, StringConstants.keepAlive);
 		else
 			resp.header.attributes.put(StringConstants.connection,  StringConstants.closeConnection);
-		resp.header.attributes.put(StringConstants.location, hto.header.attributes.get(StringConstants.host.toLowerCase()) + hto.header.param);
+		resp.header.attributes.put(StringConstants.location, hto.header.attributes.get(StringConstants.host) + hto.header.param);
 		resp.header.attributes.put(StringConstants.contentType, ftype);
 		String enc;
-		if((enc = hto.header.attributes.get(StringConstants.acceptEncoding)) != null){
+		if((enc = hto.header.attributes.get(StringConstants.acceptEncoding.toLowerCase())) != null){
+
 			HashSet<String> encset = new HashSet<String>(Arrays.asList(enc.split("\\s*,\\s*")));
 			if(encset.contains(ServerSettings.supportedEncoding)){
 				resp.header.attributes.put(StringConstants.contentEncoding, ServerSettings.supportedEncoding);
+				if(ServerSettings.supportedEncoding.equals(StringConstants.gzip))
+					try {
+						resp.body = IOUtils.compressGzip(FileCache.getPage(filePath));
+					} catch (IOException e) {
+						return internalErrorResponse(hto);
+					}
+				else if(ServerSettings.supportedEncoding.equals(StringConstants.deflate))
+					try {
+						resp.body = IOUtils.compressDeflate(FileCache.getPage(filePath));
+					} catch (IOException e) {
+						return internalErrorResponse(hto);
+					}
+				else{
+					System.err.println("Unsupported compression algorithm. Code bug or config file bug?");
+					return internalErrorResponse(hto);
+				}
 			}
 		}
-		try {
-			resp.body = FileCache.getPage(filePath);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			return internalErrorResponse(hto);
-		}
+		
 		resp.header.attributes.put(StringConstants.contentLength, ""+(resp.body.length));
 		return resp;
 	}

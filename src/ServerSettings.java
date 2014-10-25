@@ -11,7 +11,7 @@ public class ServerSettings {
 	
 	public static int socketTimeout = 10000;
 	public static boolean keepalive = true;
-	public static boolean multiThreaded = false;
+	public static boolean multiThreaded = true;
 	public static int fileCacheTimeout = 6000000;
 	public static boolean fileCacheEnabled = true;
 	public static int maxThreadCount = 10;
@@ -28,7 +28,7 @@ public class ServerSettings {
 	private static String badRequestFilePath = "res/badrequest.html";
 	private static ConcurrentSkipListSet<String> CGIExtensions = new ConcurrentSkipListSet<String>(Arrays.asList("py","sh"));
 	private static ConcurrentSkipListSet <String> textTypes = new ConcurrentSkipListSet<String>(Arrays.asList("txt", "html", "css", "js", "htm"));
-	public static String supportedEncoding = "gzip";
+	public static String supportedEncoding = "deflate";
 	public static String webRootPath = "/users/webdefault";
 	public static String userRootPath = "/home/devdeep/dump";
 	public static String userHTMLFolder = "public_html";

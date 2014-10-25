@@ -14,7 +14,7 @@ public class CGIHeader extends HTTPHeader{
 			// Put all headers in the hashmap
 			String []tokns = headerLines[i].split(":"); // split each header line at :
 			if(tokns.length != 2) continue; // Weird header line
-			attributes.put(tokns[0].trim().toLowerCase(), tokns[1].trim()); // Insert into hashmap
+			attributes.put(tokns[0].trim(), tokns[1].trim()); // Insert into hashmap without lower case as we will send this
 		}
 		
 	}

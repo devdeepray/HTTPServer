@@ -1,7 +1,11 @@
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 
 public class IOUtils {
@@ -71,6 +75,26 @@ public class IOUtils {
 			
 		return tmp;
 		
+	}
+	
+	public static Byte[] compressGzip(Byte[] data) throws IOException{
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		GZIPOutputStream gs = new GZIPOutputStream(baos);
+		gs.write(B2b(data));
+		gs.finish();
+		gs.flush();
+		return b2B(baos.toByteArray());
+	}
+
+	public static Byte[] compressDeflate(Byte[] data) throws IOException {
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		DeflaterOutputStream dos = new DeflaterOutputStream(baos);
+		dos.write(B2b(data));
+		dos.finish();
+		dos.flush();
+		return b2B(baos.toByteArray());
 	}
 	
 }
