@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -27,6 +30,67 @@ public class ServerSettings {
 	private static ConcurrentSkipListSet <String> textTypes = new ConcurrentSkipListSet<String>(Arrays.asList("txt", "html", "css", "js", "htm"));
 
 
+	public static void loadServerSettings(String fname) throws IOException{
+		BufferedReader br = FileTools.getBufferedReader(fname);
+		String tmp = null;
+		while((tmp = br.readLine()) != null)
+		{
+			
+			String [] vals = tmp.split(":");
+			if(vals.length != 2) {
+				System.err.println("Bad line in server config file");
+				continue;
+			}
+			if(vals[0].toLowerCase() == "socket-timeout")
+				socketTimeout = Integer.parseInt(vals[1]);	
+			else if(vals[0].toLowerCase() == "keel-alive")
+				keepalive = Boolean.parseBoolean(vals[1]);
+			else if(vals[0].toLowerCase() == "multi-threaded")
+				multiThreaded = Boolean.parseBoolean(vals[1]);
+			else if(vals[0].toLowerCase() == "file-cache-timeout")
+				fileCacheTimeout = Integer.parseInt(vals[1]);
+			else if(vals[0].toLowerCase() == "file-cache-enabled")
+				fileCacheEnabled = Boolean.parseBoolean(vals[1]);
+			else if(vals[0].toLowerCase() == "max-thread-count")
+				maxThreadCount = Integer.parseInt(vals[1]);
+			else if(vals[0].toLowerCase() == "port-num")
+				portNum = Integer.parseInt(vals[1]);
+			else if(vals[0].toLowerCase() == "debug-level")
+				debugLevel = Integer.parseInt(vals[1]);
+			else if(vals[0].toLowerCase() == "pipe-enabled")
+				pipeEnabled = Boolean.parseBoolean(vals[1]);
+			else if(vals[0].toLowerCase() == "max-session-queue")
+				maxSessionQueue = Integer.parseInt(vals[1]);
+			else if(vals[0].toLowerCase() == "min-session-threads")
+				minSessionThreads = Integer.parseInt(vals[1]);
+			else if(vals[0].toLowerCase() == "max-session-threads")
+				maxSessionThreads = Integer.parseInt(vals[1]);
+			else if(vals[0].toLowerCase() == "thread-keep-alive-time")
+				threadKeepAliveTime = Integer.parseInt(vals[1]);
+			else if(vals[0].toLowerCase() == "not-found-file-path")
+				notFoundFilePath = vals[1];
+			else if(vals[0].toLowerCase() == "redir-file-path")
+				redirFilePath = vals[1];
+			else if(vals[0].toLowerCase() == "internal-error-file-path")
+				internalErrorFilePath = vals[1];
+			else if(vals[0].toLowerCase() == "bad-request-file-path")
+				badRequestFilePath = vals[1];
+			else if(vals[0].toLowerCase() == "cgi-extensions"){
+				for(String x : vals[1].split(" ")){	
+					CGIExtensions.add(x);
+				}
+			}
+			else if(vals[0].toLowerCase() == "text-types"){
+				for(String x : vals[1].split(" ")){
+					textTypes.add(x);
+				}
+			}
+				
+			
+		}
+		
+	}
+	
 	public static int getSoTimeout() {
 		// TODO Auto-generated method stub
 		return socketTimeout;

@@ -1,6 +1,9 @@
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
@@ -82,6 +85,12 @@ public class FileTools {
 		String sub = filePath.substring(0, lastslind);
 		String fname = filePath.substring(lastslind + 1);
 		return FileCache.checkDoesExist(sub+ "/" + StringConstants.cgiConfName) && ServerSettings.isValidCGIExtension(getExtn(fname));
+	}
+
+	public static BufferedReader getBufferedReader(String fname) throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new FileReader(fname));
+		return br;
 	}
 
 }
