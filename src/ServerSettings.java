@@ -16,7 +16,6 @@ public class ServerSettings {
 	public static boolean keepalive = true;
 	public static int portNum  = 9090;
 	
-	
 	public static int fileCacheTimeout = 6000000;
 	public static boolean fileCacheEnabled = true;
 	public static int fileCacheSize = 10;
@@ -41,7 +40,7 @@ public class ServerSettings {
 	private static String badRequestFilePath = "res/badrequest.html";
 	private static ConcurrentSkipListSet<String> CGIExtensions = new ConcurrentSkipListSet<String>(Arrays.asList("py","sh"));
 	private static ConcurrentSkipListSet <String> textTypes = new ConcurrentSkipListSet<String>(Arrays.asList("txt", "html", "css", "js", "htm"));
-	
+
 	public static String webRootPath = "/users/webdefault";
 	public static String userRootPath = "C:/Users";
 	public static String userHTMLFolder = "public_html";

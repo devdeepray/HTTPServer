@@ -5,8 +5,12 @@
  * conversion of Byte->byte and viceversa in arrays, etc 
  */
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.GZIPOutputStream;
+
 
 public class IOUtils
 {
@@ -88,6 +92,28 @@ public class IOUtils
 	{
 		if(string1 == null || string2 == null) return false;
 		return string1.trim().toLowerCase().equals(string2.trim().toLowerCase());
+	}
+	
+	public static Byte[] compressGzip(Byte[] data) throws IOException
+	{
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		GZIPOutputStream gs = new GZIPOutputStream(baos);
+		gs.write(B2b(data));
+		gs.finish();
+		gs.flush();
+		return b2B(baos.toByteArray());
+	}
+
+	public static Byte[] compressDeflate(Byte[] data) throws IOException 
+	{
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		DeflaterOutputStream dos = new DeflaterOutputStream(baos);
+		dos.write(B2b(data));
+		dos.finish();
+		dos.flush();
+		return b2B(baos.toByteArray());
 	}
 	
 }

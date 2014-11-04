@@ -14,8 +14,7 @@ public class HTTPRequestProcessor
 		try
 		{	
 			if(HTTP11Helpers.isValidGPHRequest(hto))	
-			{
-				
+			{	
 				// POST or GET or HEAD ( Does very similar stuff )
 				String filePath = FileTools.parseUriToPath(hto.header.param);
 				System.out.println(filePath);

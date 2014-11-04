@@ -32,4 +32,6 @@ public class StringConstants {
 	public static String defaultLanding = "index.html";
 	public static String contentEncoding = "Content-Encoding";
 	public static String acceptEncoding = "Accept-Encoding";
+	public static String deflate = "deflate";
+	public static String gzip = "gzip";
 }
