@@ -1,4 +1,8 @@
-
+/**
+ * Author: Devdeep Ray
+ * Project: HTTPServer (Networks)
+ * Description: Collection of string constants so that things are not hard coded.
+ */
 public class StringConstants {
 
 	public static String HTTP11 = "HTTP/1.1";

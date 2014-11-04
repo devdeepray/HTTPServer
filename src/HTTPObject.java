@@ -1,18 +1,23 @@
+/** 
+ * Author: Devdeep Ray
+ * Project: HTTPServer (Networks)
+ * Description: This class represents an HTTP object in a structured manner. 
+ * It has a header and a binary payload.
+ */
 
-public class HTTPObject {
-	
-	// Class to represent a complete HTTP object
-	// Member variables
+public class HTTPObject 
+{
 	public HTTPHeader header;
 	public Byte [] body;
 	
-	public HTTPObject(HTTPHeader header, Byte[] body) {
+	public HTTPObject(HTTPHeader header, Byte[] body)
+	{
 		this.header = header;
 		this.body = body;
 	}
 
-	public HTTPObject() {
-		// TODO Auto-generated constructor stub
+	public HTTPObject() 
+	{
 		header = new HTTPHeader();
 		body = null;
 	}
