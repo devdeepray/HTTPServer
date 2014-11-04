@@ -152,17 +152,22 @@ public class HTTPResponses
 		resp.header.attributes.put(StringConstants.location, hto.header.attributes.get(StringConstants.host.toLowerCase()) + hto.header.param);
 		resp.header.attributes.put(StringConstants.contentType, ftype);
 		String enc;
+		boolean encodingFlag = false;
 		if((enc = hto.header.attributes.get(StringConstants.acceptEncoding)) != null)
 		{
 			HashSet<String> encset = new HashSet<String>(Arrays.asList(enc.split("\\s*,\\s*")));
 			if(encset.contains(ServerSettings.supportedEncoding))
 			{
 				resp.header.attributes.put(StringConstants.contentEncoding, ServerSettings.supportedEncoding);
+				encodingFlag = true;
 			}
 		}
 		try 
 		{
-			resp.body = FileCache.getPage(filePath);
+			if(encodingFlag)
+			{
+				resp.body = IOUtils.encode(FileCache.getPage(filePath), ServerSettings.supportedEncoding);
+			}
 		}
 		catch (IOException e) 
 		{

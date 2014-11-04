@@ -17,7 +17,6 @@ public class HTTPRequestProcessor
 			{	
 				// POST or GET or HEAD ( Does very similar stuff )
 				String filePath = FileTools.parseUriToPath(hto.header.param);
-				System.out.println(filePath);
 				if(!FileCache.checkDoesExist(filePath)) 
 				{
 					return HTTPResponses.notFoundHTTPResponse(hto); // File not found

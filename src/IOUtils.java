@@ -93,7 +93,7 @@ public class IOUtils
 		if(string1 == null || string2 == null) return false;
 		return string1.trim().toLowerCase().equals(string2.trim().toLowerCase());
 	}
-	
+
 	public static Byte[] compressGzip(Byte[] data) throws IOException
 	{
 		
@@ -114,6 +114,15 @@ public class IOUtils
 		dos.finish();
 		dos.flush();
 		return b2B(baos.toByteArray());
+	}
+
+	public static Byte[] encode(Byte[] page, String supportedEncoding) throws IOException
+	{
+		if(IOUtils.caseIgnoreEqual(supportedEncoding, "gzip")) // Encode as gzip
+			return compressGzip(page); 
+		if(IOUtils.caseIgnoreEqual(supportedEncoding, "deflate")) // Encode as deflate
+			return compressDeflate(page);
+		return null;
 	}
 	
 }

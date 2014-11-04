@@ -39,6 +39,5 @@ public class HTTPSenderRunnable implements Runnable
 		{
 			Debug.print("Exception caught in pipeline sender", debugCode);
 		}
-		System.err.println("Send thread exiting");
 	}
 }
