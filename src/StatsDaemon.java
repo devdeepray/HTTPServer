@@ -40,7 +40,7 @@ public class StatsDaemon extends Thread{
 		while(true)
 		{
 			++flushCounter;
-			flushCounter %= 20;
+			flushCounter %= ServerSettings.getStatsFlushFrequency();
 			try
 			{
 				ConnStats cs = printQueue.take(); // Block till something in the queue

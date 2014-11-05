@@ -46,6 +46,7 @@ public class ServerSettings {
 	private static String statsFile = "logFolder/log.txt";
 	
 	private static boolean enableStats = true;
+	private static int statsFlushFrequency = 1;
 
 
 	public static void loadServerSettings(String fname) throws Exception // Loads server settings from fname
@@ -109,6 +110,8 @@ public class ServerSettings {
 				badRequestFilePath = vals[1];
 			else if(vals[0].equals("stats-enable"))
 				enableStats = Boolean.parseBoolean(vals[1]);
+			else if(vals[0].equals("stats-flush-frequency"))
+				statsFlushFrequency = Integer.parseInt(vals[1]);
 			else if(vals[0].equals("cgi-extensions"))
 			{
 				for(String x : vals[1].split(" "))
@@ -271,8 +274,12 @@ public class ServerSettings {
 		return statsFile ;
 	}
 
-	public static boolean isCollectingStats() {
-		// TODO Auto-generated method stub
+	public static boolean isCollectingStats() 
+	{
 		return enableStats;
+	}
+
+	public static int getStatsFlushFrequency() {
+		return statsFlushFrequency ;
 	}
 }
