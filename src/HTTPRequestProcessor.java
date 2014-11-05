@@ -13,34 +13,28 @@ public class HTTPRequestProcessor
 	{
 		try
 		{	
-			if(HTTP11Helpers.isValidGPHRequest(hto))	
-			{	
+			
 				// POST or GET or HEAD ( Does very similar stuff )
 				String filePath = FileTools.parseUriToPath(hto.header.param);
-				if(!FileCache.checkDoesExist(filePath)) 
-				{
-					return HTTPResponses.notFoundHTTPResponse(hto); // File not found
-				}
-				else if(FileCache.checkIsDirectory(filePath)) 
-				{
-					return HTTPResponses.directoryRedirectResponse(hto, filePath); // Directory redirect
-				}
-				if(HTTP11Helpers.isValidPOSTRequest(hto)) 
-				{
-					return HTTPResponses.CGIResponse(hto, filePath); // Execute CGI script
-				}
-				if(HTTP11Helpers.isValidSimpleGETRequest(hto)) 
-				{
-					return HTTPResponses.standardGetResponse(hto, filePath); // normal GET response
-				}
-				if(HTTP11Helpers.isValidArgsGETRequest(hto)) // Get response with args 
-				{
-					return HTTPResponses.argsGetResponse(hto, filePath);
-				}
-				if(HTTP11Helpers.isValidHEADRequest(hto)) //HEAD response
-				{
-					return HTTPResponses.headResponse(hto, filePath);
-				}
+			if(!FileCache.checkDoesExist(filePath)) 
+			{
+				return HTTPResponses.notFoundHTTPResponse(hto); // File not found
+			}
+			else if(FileCache.checkIsDirectory(filePath)) 
+			{
+				return HTTPResponses.directoryRedirectResponse(hto, filePath); // Directory redirect
+			}
+			if(HTTP11Helpers.isValidCGIRequest(hto, filePath)) 
+			{
+				return HTTPResponses.CGIResponse(hto, filePath); // Execute CGI script
+			}
+			if(HTTP11Helpers.isValidSimpleGETRequest(hto, filePath)) 
+			{
+				return HTTPResponses.standardGetResponse(hto, filePath); // normal GET response
+			}
+			if(HTTP11Helpers.isValidHEADRequest(hto, filePath)) //HEAD response
+			{
+				return HTTPResponses.headResponse(hto, filePath);
 			}
 			else
 			{

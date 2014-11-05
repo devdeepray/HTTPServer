@@ -20,7 +20,6 @@ public class ServerSettings {
 	public static boolean fileCacheEnabled = true;
 	public static int fileCacheSize = 10;
 	
-	public static int maxThreadCount = 10;
 	public static boolean multiThreaded = false;
 	public static boolean pipeEnabled = true;
 	public static int maxSessionQueue = 10;
@@ -46,9 +45,10 @@ public class ServerSettings {
 	public static String userHTMLFolder = "public_html";
 	private static String statsFile = "logFolder/log.txt";
 	
+	private static boolean enableStats = true;
 
 
-	public static void loadServerSettings(String fname) throws IOException // Loads server settings from fname
+	public static void loadServerSettings(String fname) throws Exception // Loads server settings from fname
 	{
 		BufferedReader br = FileTools.getBufferedReader(fname);
 		String tmp = null;
@@ -62,6 +62,7 @@ public class ServerSettings {
 				continue;
 			}
 			vals[0] = vals[0].trim().toLowerCase();
+			vals[1] = vals[1].trim();
 			
 			if(vals[0].equals("socket-timeout"))
 				socketTimeout = Integer.parseInt(vals[1]);	
@@ -76,9 +77,6 @@ public class ServerSettings {
 				fileCacheEnabled = Boolean.parseBoolean(vals[1]);
 			else if(vals[0] .equals("file-cache-size"))
 				fileCacheSize = Integer.parseInt(vals[1]);
-			
-			else if(vals[0].equals("max-thread-count"))
-				maxThreadCount = Integer.parseInt(vals[1]);
 			else if(vals[0].equals("multi-threaded"))
 				multiThreaded = Boolean.parseBoolean(vals[1]);
 			else if(vals[0].equals("pipe-enabled"))
@@ -95,7 +93,7 @@ public class ServerSettings {
 				keepAliveMaxRequests = Integer.parseInt(vals[1]);
 			
 			else if(vals[0].equals("debug-level"))
-				debugLevel = Integer.parseInt(vals[1]);
+				debugLevel = Integer.parseInt(vals[1], 16);
 			
 			else if(vals[0].equals("cgi-conf-name"))
 				cgiConfName = vals[1];
@@ -109,7 +107,8 @@ public class ServerSettings {
 				internalErrorFilePath = vals[1];
 			else if(vals[0].equals("bad-request-file-path"))
 				badRequestFilePath = vals[1];
-			
+			else if(vals[0].equals("stats-enable"))
+				enableStats = Boolean.parseBoolean(vals[1]);
 			else if(vals[0].equals("cgi-extensions"))
 			{
 				for(String x : vals[1].split(" "))
@@ -270,5 +269,10 @@ public class ServerSettings {
 	public static String getStatsFile() 
 	{
 		return statsFile ;
+	}
+
+	public static boolean isCollectingStats() {
+		// TODO Auto-generated method stub
+		return enableStats;
 	}
 }

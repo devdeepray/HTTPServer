@@ -40,6 +40,7 @@ public class HTTPResponses
 
 	public static HTTPObject CGIResponse(HTTPObject hto, String filePath)
 	{
+		
 		try
 		{
 			
@@ -51,22 +52,30 @@ public class HTTPResponses
 			}
 			ProcessBuilder processBuilder = new ProcessBuilder(filePath);
 			Map<String, String> env = processBuilder.environment();
-			env.put("DOCUMENT_ROOT", ServerSettings.getWebRootPath()); // Set env variables
-			env.put("REQUEST_METHOD", hto.header.action);
-			env.put("CONTENT_LENGTH", ""+hto.body.length); // Set env variables
-			env.put("CONTENT_TYPE", hto.header.attributes.get(StringConstants.contentType));
-			env.put("GATEWAY_INTERFACE", StringConstants.cgiVersion); // Set env variables
-			env.put("HTTP_ACCEPT", hto.header.attributes.get(StringConstants.acceptDataType));
-			env.put("HTTP_REFERER", hto.header.attributes.get(StringConstants.referer));
-			env.put("QUERY_STRING", args);
+
+			
+			env.put("DOCUMENT_ROOT", "" + ServerSettings.getWebRootPath()); // Set env variables
+			env.put("REQUEST_METHOD", "" + hto.header.action);
+			if(hto.body != null)
+				env.put("CONTENT_LENGTH", "" + hto.body.length); // Set env variables
+			env.put("CONTENT_TYPE", "" + hto.header.attributes.get(StringConstants.contentType));
+			env.put("GATEWAY_INTERFACE", "" + StringConstants.cgiVersion); // Set env variables
+			env.put("HTTP_ACCEPT", "" + hto.header.attributes.get(StringConstants.acceptDataType));
+			env.put("HTTP_REFERER", "" + hto.header.attributes.get(StringConstants.referer));
+			env.put("QUERY_STRING", "" + args);
+			
 			Process process = processBuilder.start(); // Start process
+
 			// Give process IP and get OP
 			BufferedOutputStream bos = new BufferedOutputStream(process.getOutputStream());
 			BufferedInputStream bis = new BufferedInputStream(process.getInputStream());
 			if (hto.body != null && hto.header.action.equals(StringConstants.postRequestAction)) // Give input
 			{ 
 				bos.write(IOUtils.B2b(hto.body));
+				bos.write("\r\n".getBytes());
+				bos.flush();
 			}
+			
 			String header = new String();
 			String tmpline = new String();
 			while (true) // Get output header
@@ -103,6 +112,7 @@ public class HTTPResponses
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			return internalErrorResponse(hto);
 		}			
 	}
@@ -164,7 +174,6 @@ public class HTTPResponses
 		}
 		try 
 		{
-			System.out.print(encodingFlag);
 			if(encodingFlag)
 			{
 				resp.body = IOUtils.encode(FileCache.getPage(filePath), ServerSettings.supportedEncoding);
@@ -174,7 +183,6 @@ public class HTTPResponses
 		{
 			return internalErrorResponse(hto);
 		}
-		System.out.println(resp.body);
 		resp.header.attributes.put(StringConstants.contentLength, ""+(resp.body.length));
 		return resp;
 	}
@@ -188,10 +196,13 @@ public class HTTPResponses
 		resp.header.attributes.put(StringConstants.connection, StringConstants.closeConnection);
 		resp.header.attributes.put(StringConstants.contentType, StringConstants.textHtml);
 		resp.body = FileCache.getPermPage(ServerSettings.getBadRequestFile());
+		resp.header.attributes.put(StringConstants.contentLength, ""+ resp.body.length);
 		return resp;
 	}
 
-	public static HTTPObject internalErrorResponse(HTTPObject hto) {
+	public static HTTPObject internalErrorResponse(HTTPObject hto)
+	{
+		
 		HTTPObject resp = new HTTPObject();
 		resp.header.version = StringConstants.HTTP11;
 		resp.header.action = StringConstants.internalErrorCode;
@@ -199,10 +210,12 @@ public class HTTPResponses
 		resp.header.attributes.put(StringConstants.connection, StringConstants.closeConnection);
 		resp.header.attributes.put(StringConstants.contentType, StringConstants.textHtml);
 		resp.body = FileCache.getPermPage(ServerSettings.getInternalErrorFile());
+		resp.header.attributes.put(StringConstants.contentLength, ""+ resp.body.length);
 		return resp;
 	}
 	
-	public static HTTPObject notFoundHTTPResponse(HTTPObject hto){
+	public static HTTPObject notFoundHTTPResponse(HTTPObject hto)
+	{
 		
 		HTTPObject resp = new HTTPObject();
 		resp.header.version = StringConstants.HTTP11;

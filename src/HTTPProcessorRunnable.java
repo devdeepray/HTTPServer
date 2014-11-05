@@ -32,6 +32,7 @@ public class HTTPProcessorRunnable implements Runnable
 				if(recMessage.header == null) // End pipe signal from hrt
 					break;
 				Debug.print("Start processing message", debugCode);
+				
 				respMessages.put(HTTPRequestProcessor.getResponse(recMessage)); // Process request
 				Debug.print("End processing message", debugCode);
 			} while (ServerSettings.isKeepAlive()); // Keep looping

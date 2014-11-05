@@ -16,9 +16,9 @@ public class MainServer
 		
 		try
 		{
-			ServerSettings.loadServerSettings("res/serverSettings.ss");
+			ServerSettings.loadServerSettings("res/serverSettings.conf");
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			Debug.print("Server settings not loaded. Defaulting", debugCode);
 		}
@@ -44,14 +44,19 @@ public class MainServer
 			return;
 		}
 		StatsDaemon stats = null;
-		try {
-			stats = new StatsDaemon();
-		} catch (IOException e) {
-			e.printStackTrace();
-			Debug.print("Unable to start stats daemon", debugCode);
+		if(ServerSettings.isCollectingStats())
+		{
+			try {
+				stats = new StatsDaemon();
+			} catch (IOException e) {
+				e.printStackTrace();
+				Debug.print("Unable to start stats daemon", debugCode);
+				return;
+			}
+			stats.setDaemon(true);
+			stats.start();
 		}
-		stats.setDaemon(true);
-		stats.start();
+		
 		Debug.print("Listening on port " + ServerSettings.getPortNumber(), debugCode);
 		connlistener.beginListening();	// Start listening
 	}

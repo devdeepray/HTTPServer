@@ -13,13 +13,15 @@ public class HTTP11Helpers
 		return hto.header.action.equals(StringConstants.getRequestAction) && hasHost(hto); 
 	}
 	
-	public static boolean isValidPOSTRequest(HTTPObject hto)
+	public static boolean isValidCGIRequest(HTTPObject hto, String filePath)
 	{
 		// Correct syntax of header for POST
-		return hto.header.action.equals(StringConstants.postRequestAction) && hasHost(hto);
+		return (hto.header.action.equals(StringConstants.postRequestAction)
+				|| hto.header.action.equals(StringConstants.getRequestAction)) &&
+				FileCache.checkIsValidCGI(filePath) && hasHost(hto);
 	}
 	
-	public static boolean isValidHEADRequest(HTTPObject hto)
+	public static boolean isValidHEADRequest(HTTPObject hto, String filePath)
 	{
 		// Correct syntax of header for HEAD
 		return hto.header.action.equals(StringConstants.headRequestAction) && hasHost(hto); 
@@ -31,18 +33,7 @@ public class HTTP11Helpers
 		return hto.header.attributes.containsKey(StringConstants.host.trim().toLowerCase());
 	}
 
-	public static boolean isValidGPHRequest(HTTPObject hto) 
-	{
-		return isValidGETRequest(hto) || isValidHEADRequest(hto) || isValidPOSTRequest(hto);
-	}
-
-	public static boolean isValidArgsGETRequest(HTTPObject hto)
-	{
-		int qmindex = hto.header.param.indexOf('?');
-		return isValidGETRequest(hto) && (qmindex != -1);
-	}
-
-	public static boolean isValidSimpleGETRequest(HTTPObject hto) 
+	public static boolean isValidSimpleGETRequest(HTTPObject hto, String filePath) 
 	{
 		int qmindex = hto.header.param.indexOf('?');
 		return isValidGETRequest(hto) && (qmindex == -1);

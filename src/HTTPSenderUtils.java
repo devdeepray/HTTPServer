@@ -20,6 +20,7 @@ public class HTTPSenderUtils
 			tmp = (x + ": " + response.header.attributes.get(x) + "\r\n");
 			bos.write(tmp.getBytes());	
 			cs.bytesSent += tmp.length();
+
 		}
 		tmp = "\r\n";
 		bos.write(tmp.getBytes());

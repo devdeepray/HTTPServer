@@ -22,6 +22,7 @@ public class StatsDaemon extends Thread{
 	
 	public static void printStatsToLog(ConnStats connstats)
 	{
+		if(!ServerSettings.isCollectingStats()) return;
 		try 
 		{
 			printQueue.put(connstats); // Put stats in the print queue
@@ -35,13 +36,19 @@ public class StatsDaemon extends Thread{
 	@Override
 	public void run() 
 	{
+		int flushCounter = 0;
 		while(true)
 		{
+			++flushCounter;
+			flushCounter %= 20;
 			try
 			{
 				ConnStats cs = printQueue.take(); // Block till something in the queue
 				br.write(cs.getStringRep()); // Write to file
-				br.flush();
+				if(flushCounter == 0)
+				{
+					br.flush(); // Flush every 20 outputs
+				}
 			}
 			catch (InterruptedException | IOException e) 
 			{

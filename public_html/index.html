@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<HTML>
+	<HEAD>
+		<TITLE>
+		Devdeep Ray
+		</TITLE>
+		<link href='http://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+		</script>
+		<script> 
+		$(document).ready(function(){
+ 	 		$("#acadtab").click(function(){
+    			$("#gencontent").animate({left:'-1200px'},500);
+    			//$("#homecont").hide();
+  			});
+		});
+		$(document).ready(function(){
+ 	 		$("#hometab").click(function(){
+    			$("#gencontent").animate({left:'0px'},500);
+  			});
+		});
+		$(document).ready(function(){
+ 	 		$("#inttab").click(function(){
+    			$("#gencontent").animate({left:'-2400px'},500);
+  			});
+		});
+		$(document).ready(function(){
+ 	 		$("#projtab").click(function(){
+    			$("#gencontent").animate({left:'-3600px'},500);
+  			});
+		});
+		$(document).ready(function(){
+ 	 		$("#hobtab").click(function(){
+    			$("#gencontent").animate({left:'-4800px'},500);
+  			});
+		});
+		/*$(document).ready(function(){
+ 	 		$("#blogtab").click(function(){
+    			$("#gencontent").animate({left:'-6000px'},500);
+  			});
+		});*/
+		</script> 
+		</script> 
+
+		<STYLE type="text/css">
+		BODY{
+			background-color: white;
+			margin: 0 auto;
+			padding: 0;
+			font-family: "Lato", "AppleGothic", sans-serif, "Century Gothic", CenturyGothic ,"Avant Garde", Avantgarde;
+			font-weight: 100;
+			
+		}
+		
+		#fullpage{
+			position:relative;
+			margin: 0 auto;
+			width: 1200px;
+			padding-bottom: 100px;
+			
+			//background-image: url("./media/images/homebg.jpg");
+			//background-repeat: no-repeat;
+			//background-size: cover;
+		}
+
+		#heading P{
+			cursor: pointer;
+			display: block;
+			background-color: white;
+			transition: background-color 0.2s linear;
+			width:22%;
+			position:relative;
+			padding-left: 20px;
+			//top: 25px;
+			padding-top: 20px;
+			padding-bottom: 0px;
+			font-size: 1.8em;
+			font-weight: 200;
+			letter-spacing: 0.18em;
+		}
+		#heading P:hover{
+			cursor: pointer;
+			background-color: white;
+		}
+		#navbar{
+			position:relative;
+			width:100.5%;
+			left: -3px;
+			padding-top: 20px;
+			padding-bottom: 20px;
+			font-size: 1.2em;
+			letter-spacing: 0.18em;
+		}
+		#navbar table{
+			text-align: center;
+			table-layout: fixed;
+			width: 100%;
+		}
+		#navbar a, a:visited, a:hover, a:active{
+			text-decoration:none;
+			color:#000000;
+		}
+		
+		#navbar p{
+			cursor: pointer;
+			transition: all 0.2s linear;
+			display: block;
+			background-color:#98bf21;
+			text-decoration: none;
+			color: black;
+		}
+		#navbar p:hover{
+			cursor: pointer;
+			display: block;
+			background-color:#7A991A;
+			text-decoration: none;
+			color: black;
+		}
+		#container{
+			width: 1200px;
+			overflow: hidden;
+			height: 500px;
+
+		}
+
+		#gencontent{
+			position: relative;
+			display: block;
+			background-color: white;
+			width: 7200px;
+			height: 500px;
+			//left: 0px;
+			font-size: 1.2em;
+			letter-spacing: 0.18em;
+			line-height: 1.8em;
+			overflow: hidden;
+		}
+		.tabcontent {
+		display: block;
+		background-color: white;
+			float: left;
+			position: relative;
+			width: 1200px;
+			height: 500px;
+			
+
+
+		}
+		.tabcontent p{
+			padding-left: 200px;
+			padding-top: 100px;
+			padding-right: 200px;
+			padding-bottom: 100px;
+		}
+		
+		
+		#contactinfo{
+			position: absolute;
+			bottom: 0px;
+			left: 10px
+		}
+		
+		#mypic {
+		position: absolute;
+		right: 20px;
+		top: -7px;
+		}
+
+		</STYLE>
+	</HEAD>
+	<BODY>
+		<DIV id="fullpage">
+			<DIV id="mypic">
+			<img src="./media/images/devdeep.jpg" height=150px width=150px>
+			</DIV>
+			<DIV id="heading">
+			<P>Devdeep Ray <br> CSE@IITB</P>
+			</DIV>
+			<DIV id="navbar">
+				<table>
+					<tr>
+						<td ><p id="hometab" >Home</p></td>
+						<td ><p id="acadtab" >Academics</p></td>
+						<td><p id="inttab">Interests</p></td>
+						<td><p id="projtab">Projects</p></td>
+						<td><p id="hobtab">Hobbies</p></td>
+						<td><a href="./media/resume/2page.pdf"><p id="resume">Resume</p></a></td>
+					</tr>
+				</table>
+			</DIV>
+			<DIV id="container">
+			<DIV id="gencontent">
+				<!--home tab-->
+				<DIV class="tabcontent" >
+					<P>
+				Welcome to my personal page! I am a sophomore pursuing a major in Computer Science and Engineering at IIT-B. I am also pursuing a minor in Electrical Engineering. Look around to learn more about me! Navigate using the bars above. Please do not spam my mailbox :)
+				</P>
+				</DIV>
+				<DIV id="contactinfo">
+					Add me on <a href="http://www.facebook.com/devdeep.ray1994"><img src="./media/images/fblogo.jpg" width=42 height=42></a>
+					<a href="https://www.google.co.in/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CDQQFjAA&url=https%3A%2F%2Fplus.google.com%2F115012619484652291616&ei=ZwxdUpy7IIntrAev5ICgAg&usg=AFQjCNEPoLxAYqk4ZtnPVzFsEXmnV2dsCA&sig2=m5MjznzyRfLO5S34Y1lk2A"><img src="./media/images/gpluslogo.jpg" width=42 height=42></a>
+					<br> 
+					Mail me <a href="mailto:devdeep.ray1994@iitb.ac.in">devdeep.ray1994@iitb.ac.in</a>
+				</DIV>
+				<!--acad tab-->
+				<DIV class="tabcontent">
+					<P>
+						CPI: 9.69 <br>
+						All india rank 13 in IIT-JEE 2012 <br>
+						AP grade in Computer Programming and Utilisation <br>
+						94.18% in ICSE-2010 examination<br>
+						94.8% in HSC-2012 examination
+					</P>
+				</DIV>
+				<!--Interests tab-->
+				<DIV class="tabcontent">
+					<P>
+						Functional Programming
+						<br>
+						Algorithms
+						<br>
+						Computer Graphics
+						<br>
+						Discrete Optimization techniques
+						<br>
+						Graph Theory
+					</P>
+				</Div>
+				<DIV class="tabcontent">
+					<P>
+						Ray tracer in DrRacket. Click <a href="./media/pdf/raytrcr.pdf">here</a> to know more.
+						<br>
+						Functional graphics library in DrRacket implementing various sprites.
+						<br>
+						Active suspension system under ITSP.
+						<br>
+						Modelled a system of 5 ATMs in a city to predict optimal refilling time.
+						<br>
+						Working under MSI to build a rover for URC.
+						<br>
+						Fish aquarium simulator using simplecpp.
+						<br>
+						
+					</P>
+				</Div>
+				<DIV class="tabcontent">
+					<P>
+						I play the guitar and the electronic keyboard. I have passed grade 5 electronic keyboard under Trinity College, London and grade 4 music theory under <a href="http://in.abrsm.org/en/home"> ABRSM</a>. <br>
+						I also like photography. <a href="">Here</a> is some of my work. <br>
+						I am also a foodie :) I believe that we live to eat, not the other way round ;) 
+					</P>
+				</Div>
+				</DIV>
+			</DIV>
+		</DIV>
+	</BODY>
+</HTML>
+

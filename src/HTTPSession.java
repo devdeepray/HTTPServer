@@ -60,8 +60,8 @@ public class HTTPSession implements Runnable
 			HTTPProcessorRunnable hpt = new HTTPProcessorRunnable(hrt);
 			HTTPSenderRunnable hst = new HTTPSenderRunnable(os, hpt, cs);
 			Debug.print("Starting all pipe threads", debugCode);
-			ThreadPool.executeSessionThread(hrt); // Execute receiver in a thread
-			ThreadPool.executeSessionThread(hpt); // Execute processor in a thread
+			ThreadPool.executeReceiverThread(hrt); // Execute receiver in a thread
+			ThreadPool.executeProcessorThread(hpt); // Execute processor in a thread
 			hst.run(); // Use same thread for the sender thread
 			Debug.print("third pipe exited. Closing connections, blah", debugCode);
 		}

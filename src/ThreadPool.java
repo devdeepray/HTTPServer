@@ -15,15 +15,35 @@ import java.util.concurrent.TimeUnit;
 
 public class ThreadPool 
 {
-	public static ExecutorService threadExecutor = new ThreadPoolExecutor // Create Thread pool			 
+	public static ExecutorService sessionThreadExecutor = new ThreadPoolExecutor // Create Thread pool			 
 															(ServerSettings.getMinThreads(), 
 															ServerSettings.getMaxThreads(), 
 															ServerSettings.getThreadKeepAliveTime(), 
 															TimeUnit.MILLISECONDS,
 															new ArrayBlockingQueue<Runnable>(ServerSettings.getMaxSessionQueue()));
+	public static ExecutorService receiverThreadExecutor = new ThreadPoolExecutor // Create Thread pool			 
+			(ServerSettings.getMinThreads(), 
+			ServerSettings.getMaxThreads(), 
+			ServerSettings.getThreadKeepAliveTime(), 
+			TimeUnit.MILLISECONDS,
+			new ArrayBlockingQueue<Runnable>(ServerSettings.getMaxSessionQueue()));
+	public static ExecutorService processorThreadExecutor = new ThreadPoolExecutor // Create Thread pool			 
+			(ServerSettings.getMinThreads(), 
+			ServerSettings.getMaxThreads(), 
+			ServerSettings.getThreadKeepAliveTime(), 
+			TimeUnit.MILLISECONDS,
+			new ArrayBlockingQueue<Runnable>(ServerSettings.getMaxSessionQueue()));
 	
 	public static void executeSessionThread(Runnable runnable)
 	{
-		threadExecutor.execute(runnable); // Put above runnable in queue
+		sessionThreadExecutor.execute(runnable); // Put above runnable in queue
+	}
+	public static void executeReceiverThread(Runnable runnable)
+	{
+		receiverThreadExecutor.execute(runnable); // Put above runnable in queue
+	}
+	public static void executeProcessorThread(Runnable runnable)
+	{
+		processorThreadExecutor.execute(runnable); // Put above runnable in queue
 	}
 }

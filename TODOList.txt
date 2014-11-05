@@ -19,10 +19,4 @@ MainServer.java --> Done 0x1
 ServerSettings.java --> Done
 StringConstants.java 
 ThreadPool.java --> Done
-
-DDOS, 
-GUI,
-Request flood --> Done
-Timeout: Socket vs connection
-File perms 
-Stats
+Stats --> Done
