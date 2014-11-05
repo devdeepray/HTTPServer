@@ -30,9 +30,10 @@ public class ConnectionListener
 			try 
 			{
 				socket = serversocket.accept(); // Block till connection comes
+				ConnStats cs = new ConnStats(socket.getInetAddress().toString(), socket.getPort(), System.currentTimeMillis());
 				socket.setSoTimeout(ServerSettings.getSoTimeout()); // Set timeout
 				Debug.print("TCP connection established", debugCode); 
-				httpsession = new HTTPSession(socket); // Create new HTTPSession
+				httpsession = new HTTPSession(socket, cs); // Create new HTTPSession
 			} 
 			catch (IOException e)
 			{

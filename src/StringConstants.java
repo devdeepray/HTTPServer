@@ -34,4 +34,7 @@ public class StringConstants {
 	public static String acceptEncoding = "Accept-Encoding";
 	public static String deflate = "deflate";
 	public static String gzip = "gzip";
+	public static String cgiVersion = "CGI/1.1";
+	public static String acceptDataType = "Accept";
+	public static String referer = "Referer";
 }

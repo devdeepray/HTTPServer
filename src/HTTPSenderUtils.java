@@ -10,16 +10,22 @@ import java.io.OutputStream;
 
 public class HTTPSenderUtils 
 {
-	public static void send(HTTPObject response, OutputStream bos) throws Exception 
+	public static void send(HTTPObject response, OutputStream bos, ConnStats cs) throws Exception 
 	{
-		bos.write((response.header.version + " " + response.header.action + " " + response.header.param + "\r\n").getBytes());
+		String tmp = (response.header.version + " " + response.header.action + " " + response.header.param + "\r\n");
+		bos.write(tmp.getBytes());
+		cs.bytesSent += tmp.length();
 		for(String x : response.header.attributes.keySet())
 		{
-			bos.write((x + ": " + response.header.attributes.get(x) + "\r\n").getBytes());
-			
+			tmp = (x + ": " + response.header.attributes.get(x) + "\r\n");
+			bos.write(tmp.getBytes());	
+			cs.bytesSent += tmp.length();
 		}
-		bos.write("\r\n".getBytes());
+		tmp = "\r\n";
+		bos.write(tmp.getBytes());
+		cs.bytesSent += tmp.length();
 		bos.write(IOUtils.B2b(response.body));
+		cs.bytesSent += response.body.length;
 		bos.flush();
 	}	
 }

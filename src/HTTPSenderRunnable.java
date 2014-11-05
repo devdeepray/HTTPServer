@@ -13,11 +13,13 @@ public class HTTPSenderRunnable implements Runnable
 	HTTPProcessorRunnable hpt; // The processor from which to pick responses
 	OutputStream os; // Output stream to write to 
 	private static int debugCode = 0xF; // Debug mask
+	ConnStats cs;
 	
-	public HTTPSenderRunnable(OutputStream os, HTTPProcessorRunnable hpt) 
+	public HTTPSenderRunnable(OutputStream os, HTTPProcessorRunnable hpt, ConnStats cs) 
 	{
 		this.hpt = hpt;
 		this.os = os;
+		this.cs = cs;
 	}
 
 	public void run() 
@@ -32,7 +34,7 @@ public class HTTPSenderRunnable implements Runnable
 				Debug.print("Sender took", debugCode);
 				if(tmp.header == null) // Exit if end of pipe signalled
 					break;
-				HTTPSenderUtils.send(tmp, os); // Send to socket
+				HTTPSenderUtils.send(tmp, os, cs); // Send to socket
 			} while (ServerSettings.isKeepAlive());
 		} 
 		catch ( Exception e) 

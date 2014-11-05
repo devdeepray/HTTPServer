@@ -14,14 +14,14 @@ public class HTTPReceiverUtils {
 
 	static int debugCode = 0x10;
 	
-	public static HTTPObject receive(InputStream is) throws IOException 
+	public static HTTPObject receive(InputStream is, ConnStats cs) throws IOException 
 	{
 		String header = new String(); // Read header into this
 		String tmpline = new String();
 		Debug.print("Starting to read header", debugCode);
 		while(true) // Keep reading till end of header
 		{
-			tmpline = IOUtils.readLineFromStreamReader(is);
+			tmpline = IOUtils.readLineFromStreamReader(is, cs);
 			if (tmpline == null ||  tmpline.equals("")) // End of stream OR \r\n\r\n
 			{
 				break;

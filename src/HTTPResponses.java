@@ -42,15 +42,28 @@ public class HTTPResponses
 	{
 		try
 		{
+			
+			int qmindex = hto.header.param.indexOf('?');
+			String args = "";
+			if(qmindex >= 0 && hto.header.action.equals(StringConstants.getRequestAction))
+			{
+				args = hto.header.param.substring(qmindex + 1);
+			}
 			ProcessBuilder processBuilder = new ProcessBuilder(filePath);
 			Map<String, String> env = processBuilder.environment();
 			env.put("DOCUMENT_ROOT", ServerSettings.getWebRootPath()); // Set env variables
 			env.put("REQUEST_METHOD", hto.header.action);
+			env.put("CONTENT_LENGTH", ""+hto.body.length); // Set env variables
+			env.put("CONTENT_TYPE", hto.header.attributes.get(StringConstants.contentType));
+			env.put("GATEWAY_INTERFACE", StringConstants.cgiVersion); // Set env variables
+			env.put("HTTP_ACCEPT", hto.header.attributes.get(StringConstants.acceptDataType));
+			env.put("HTTP_REFERER", hto.header.attributes.get(StringConstants.referer));
+			env.put("QUERY_STRING", args);
 			Process process = processBuilder.start(); // Start process
 			// Give process IP and get OP
 			BufferedOutputStream bos = new BufferedOutputStream(process.getOutputStream());
 			BufferedInputStream bis = new BufferedInputStream(process.getInputStream());
-			if (hto.body != null) // Give input
+			if (hto.body != null && hto.header.action.equals(StringConstants.postRequestAction)) // Give input
 			{ 
 				bos.write(IOUtils.B2b(hto.body));
 			}
@@ -96,20 +109,7 @@ public class HTTPResponses
 
 	public static HTTPObject argsGetResponse(HTTPObject hto, String filePath) 
 	{
-		try
-		{
-			int qmindex = hto.header.param.indexOf('?');
-			if (qmindex == -1) return standardGetResponse(hto, filePath);
-			String args = hto.header.param.substring(qmindex + 1);
-			String newparam = hto.header.param.substring(0, qmindex);
-			hto.header.param = newparam;
-			hto.body = IOUtils.b2B(args.getBytes());
-			return CGIResponse(hto, filePath);
-		}
-		catch (Exception e)
-		{	
-			return internalErrorResponse(hto);
-		}			
+		return CGIResponse(hto, filePath);			
 	}
 
 	public static HTTPObject headResponse(HTTPObject hto, String filePath)
@@ -153,7 +153,7 @@ public class HTTPResponses
 		resp.header.attributes.put(StringConstants.contentType, ftype);
 		String enc;
 		boolean encodingFlag = false;
-		if((enc = hto.header.attributes.get(StringConstants.acceptEncoding)) != null)
+		if((enc = hto.header.attributes.get(StringConstants.acceptEncoding.toLowerCase())) != null)
 		{
 			HashSet<String> encset = new HashSet<String>(Arrays.asList(enc.split("\\s*,\\s*")));
 			if(encset.contains(ServerSettings.supportedEncoding))
@@ -164,6 +164,7 @@ public class HTTPResponses
 		}
 		try 
 		{
+			System.out.print(encodingFlag);
 			if(encodingFlag)
 			{
 				resp.body = IOUtils.encode(FileCache.getPage(filePath), ServerSettings.supportedEncoding);
@@ -173,6 +174,7 @@ public class HTTPResponses
 		{
 			return internalErrorResponse(hto);
 		}
+		System.out.println(resp.body);
 		resp.header.attributes.put(StringConstants.contentLength, ""+(resp.body.length));
 		return resp;
 	}

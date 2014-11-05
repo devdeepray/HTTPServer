@@ -29,7 +29,7 @@ public class ServerSettings {
 	private static long threadKeepAliveTime = 6000000;
 	private static int keepAliveMaxRequests = 10;
 	
-	public static int debugLevel = 0xFF;
+	public static int debugLevel = 0x0;
 	
 	public static String supportedEncoding = "gzip";
 	public static String cgiConfName = "cgienab";
@@ -44,6 +44,7 @@ public class ServerSettings {
 	public static String webRootPath = "/users/webdefault";
 	public static String userRootPath = "C:/Users";
 	public static String userHTMLFolder = "public_html";
+	private static String statsFile = "logFolder/log.txt";
 	
 
 
@@ -264,5 +265,10 @@ public class ServerSettings {
 	public static int getKeepAliveMaxRequests() 
 	{
 		return keepAliveMaxRequests ;
+	}
+
+	public static String getStatsFile() 
+	{
+		return statsFile ;
 	}
 }

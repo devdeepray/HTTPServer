@@ -15,10 +15,12 @@ public class HTTPSession implements Runnable
 {
 	Socket socket;
 	public static int debugCode = 0x4;
+	ConnStats cs;
 	
-	public HTTPSession(Socket socket)
+	public HTTPSession(Socket socket, ConnStats cs)
 	{
 		this.socket = socket;
+		this.cs = cs;
 	}
 	
 	public void closeSocket()
@@ -54,9 +56,9 @@ public class HTTPSession implements Runnable
 		// Pipelining the requests and data sending if piping enabled
 		if(ServerSettings.isPiped())
 		{	
-			HTTPReceiverRunnable hrt = new HTTPReceiverRunnable(is);
+			HTTPReceiverRunnable hrt = new HTTPReceiverRunnable(is, cs);
 			HTTPProcessorRunnable hpt = new HTTPProcessorRunnable(hrt);
-			HTTPSenderRunnable hst = new HTTPSenderRunnable(os, hpt);
+			HTTPSenderRunnable hst = new HTTPSenderRunnable(os, hpt, cs);
 			Debug.print("Starting all pipe threads", debugCode);
 			ThreadPool.executeSessionThread(hrt); // Execute receiver in a thread
 			ThreadPool.executeSessionThread(hpt); // Execute processor in a thread
@@ -71,7 +73,7 @@ public class HTTPSession implements Runnable
 				boolean keepaliveEnabled = ServerSettings.keepalive; // Keep alive flag for loop
 				while(keepaliveEnabled)
 				{
-					HTTPObject recObj = HTTPReceiverUtils.receive(is);
+					HTTPObject recObj = HTTPReceiverUtils.receive(is, cs);
 					String keepaliveflag = recObj.header.attributes.get(StringConstants.connection);
 					// Check if close connection received
 					if(keepaliveflag != null && 
@@ -80,7 +82,7 @@ public class HTTPSession implements Runnable
 						keepaliveEnabled = false;
 					}
 					// Process and send response
-					HTTPSenderUtils.send(HTTPRequestProcessor.getResponse(recObj), os);
+					HTTPSenderUtils.send(HTTPRequestProcessor.getResponse(recObj), os, cs);
 				}
 			} 
 			catch (Exception e) 
@@ -88,7 +90,9 @@ public class HTTPSession implements Runnable
 				Debug.print("Finished rec proc send loop.", debugCode);
 			}
 		}
-		System.err.println("HTTP Session ended. Closing down connection and other stuff");
+		Debug.print("HTTP Session ended. Closing down connection and other stuff", debugCode);
+		cs.closeTime = System.currentTimeMillis();
+		StatsDaemon.printStatsToLog(cs);
 		closeSocket();
 		return;
 	}

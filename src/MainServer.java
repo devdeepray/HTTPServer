@@ -43,7 +43,15 @@ public class MainServer
 			e1.printStackTrace();
 			return;
 		}
-		
+		StatsDaemon stats = null;
+		try {
+			stats = new StatsDaemon();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Debug.print("Unable to start stats daemon", debugCode);
+		}
+		stats.setDaemon(true);
+		stats.start();
 		Debug.print("Listening on port " + ServerSettings.getPortNumber(), debugCode);
 		connlistener.beginListening();	// Start listening
 	}

@@ -5,6 +5,7 @@
  * conversion of Byte->byte and viceversa in arrays, etc 
  */
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,12 +16,13 @@ import java.util.zip.GZIPOutputStream;
 public class IOUtils
 {
 	
-	public static String readLineFromStreamReader(InputStream is) throws IOException
+	public static String readLineFromStreamReader(InputStream is, ConnStats cs) throws IOException
 	{	
 		String tmpstr = new String();
 		boolean flag = false; // For atleast one character
 		while(true)
 		{
+			cs.bytesReceived++;
 			int tmp = is.read();
 			if(tmp == -1) break; // End of stream
 			if(tmp == (int)'\n') // New line
@@ -42,6 +44,11 @@ public class IOUtils
 		{
 			return null; // No characters
 		}
+	}
+	
+	public static String readLineFromStreamReader(BufferedInputStream bis) throws IOException
+	{
+		return readLineFromStreamReader(bis, new ConnStats("", 0, 0));
 	}
 
 	public static Byte[] b2B(byte[] bodytmp)  // Convert byte[] to Byte[]
@@ -124,5 +131,7 @@ public class IOUtils
 			return compressDeflate(page);
 		return null;
 	}
+
+	
 	
 }
